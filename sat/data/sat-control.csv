@@ -1,0 +1,7 @@
+day,sat_practice_test_number,condition,sleep_deprivation_days,section,score
+1,3,control,0,math,710
+1,3,control,0,reading_and_writing,760
+19,8,control,0,math,780
+19,8,control,0,reading_and_writing,760
+20,9,control,0,math,750
+20,9,control,0,reading_and_writing,690

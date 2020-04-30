@@ -1,0 +1,567 @@
+﻿<usermanual>														
+___________________________________________________________________________________________________________________	
+
+							*PERCEPTUAL VIGILANCE TEST (simple Visual Reaction Time Task)*
+											input device: keyboard
+___________________________________________________________________________________________________________________	
+
+
+Script Author: Katja Borchert, Ph.D. (katjab@millisecond.com) for Millisecond Software, LLC
+last updated:  12-17-2019 by K. Borchert (katjab@millisecond.com) for Millisecond Software, LLC
+
+Script Copyright © 12-17-2019 Millisecond Software
+
+___________________________________________________________________________________________________________________
+BACKGROUND INFO 	
+___________________________________________________________________________________________________________________	
+This script runs a simple visual reaction time task similar to the one described by:
+
+Wilkinson, R. T., & Houghton, D. (1982). Field test of arousal: 
+A portable reaction timer with data storage. Human Factors, 24, 487-493.
+
+___________________________________________________________________________________________________________________
+TASK DESCRIPTION
+___________________________________________________________________________________________________________________	
+Participant are asked to press the SPACEBAR as soon as they see a red circle appearing on screen.
+Afterwards, their reaction is displayed for 0.5s (editable). The test is timed and stops after 10min (editable).
+Mean and Median latency, latency standard deviation as well as minimum latency and maximum latency
+are recorded in the summary data file.
+___________________________________________________________________________________________________________________	
+DURATION 
+___________________________________________________________________________________________________________________	
+the default set-up of the script takes appr. 10 minutes to complete
+
+___________________________________________________________________________________________________________________	
+DATA FILE INFORMATION 
+___________________________________________________________________________________________________________________
+The default data stored in the data files are:
+
+(1) Raw data file: 'perceptualvigilancetask_keyboard_raw*.iqdat' (a separate file for each participant)
+
+build:							The specific Inquisit version used (the 'build') that was run
+computer.platform:				the platform the script was run on (win/mac/ios/android)
+date, time, 						date and time script was run 
+subject, group, 					with the current subject/groupnumber
+script.sessionid:					with the current session id
+
+blockcode, blocknum:				the name and number of the current block (built-in Inquisit variable)
+trialcode, trialnum: 				the name and number of the currently recorded trial (built-in Inquisit variable)
+										Note: trialnum is a built-in Inquisit variable; it counts all trials run; even those
+										that do not store data to the data file such as feedback trials. Thus, trialnum 
+										may not reflect the number of main trials run per block. 
+									
+parameters.testduration:			duration of test: recommended minimum time is 600000ms => 10 min																			
+parameters.targetcolor:			the current color of the target circle
+parameters.targetsize:				the current color of the target circle
+parameters.fixed:					1= fixed position of target; 0 = random position of target
+parameters.targetx:				the x-coordinate of the target circle
+parameters.targety:				the y-coordinate of the target circle
+
+
+values.stiminterval:				determines how long the focus stimulus is shown before the target stimulus is presented
+values.trialStart:					script.elapsedtime (in ms) at start of trial (script.elapsedtime measured from start of script)
+shape.targetcircle.timestamp:		script.elapsedtime (in ms) of last circle appearance
+
+values.lastCircleTimestamp:		stores the script.elapsedtime of the circle appearance in the previous trial
+										Note: if response was made BEFORE the appearance of a new circle, 
+										lastCircleTimestamp = shape.targetcircle.timestamp; otherwise
+										they differ
+										
+response:						the scancode of the key pressed (here: 57 = spacebar)
+values.rt_elapsed:					script.elapsedtime (in ms) at time of response (Note: elapsedtime = time elapsed from start of script)
+
+values.rt:						stores the current response latency (in ms); 
+								calculated as the difference of elapsedtime of response and elapsedtime of circle									
+								Note: if response was made BEFORE onset of circle Latency = "early response"
+
+values.EarlyResponse:				1 = the response was given before the circle appeared
+								0 = the response was given after the circle appeared
+								
+values.countEarlyResponses:		count of all early responses
+									
+values.countResponses:			running count of the number of responses made 
+								(includes early responses but excludes the first response made)
+
+
+(2) Summary data file: 'perceptualvigilancetask_keyboard_summary*.iqdat' (a separate file for each participant)
+
+computer.platform:				the platform the script was run on (win/mac/ios/android)
+script.startdate:					date script was run
+script.starttime:					time script was started
+script.subjectid:					assigned subject id number
+script.groupid:					assigned group id number
+script.sessionid:					assigned session id number
+script.elapsedtime:				time it took to run script (in ms); measured from onset to offset of script
+script.completed:					0 = script was not completed (prematurely aborted); 
+								1 = script was completed (all conditions run)
+																
+parameters.testduration:			duration of test: recommended minimum time is 600000ms => 10 min																			
+parameters.targetcolor:			the current color of the target circle
+parameters.targetsize:				the current color of the target circle
+parameters.fixed:					1= fixed position of target; 0 = random position of target
+parameters.targetx:				the x-coordinate of the target circle
+parameters.targety:				the y-coordinate of the target circle								
+								
+
+values.countEarlyResponses:				count of all early responses
+									
+values.countResponses:					running count of the number of responses made 
+										(includes early responses but excludes the first response made)
+										
+expressions.proportionEarlyResponses: 				proportion early responses (in relation to total number of responses made)
+
+									
+Note: latency data is based on valid responses only (excludes early responding)
+									
+expressions.meanRT:								mean response latency in ms (for trials that were responded to)
+expressions.Std,:									standard deviation of the response latencies (for trials that were responded to)
+expressions.medianRT:							median latency in ms (for trials that were responded to)
+expressions.minRT:								minimum response latency (in ms)
+expressions.maxRT:								maximum response latency (in ms)
+
+
+___________________________________________________________________________________________________________________	
+EXPERIMENTAL SET-UP 
+___________________________________________________________________________________________________________________	
+(a) By default, the target stimulus appears in the center of the screen. Changes can be made under 
+"Editable Parameters", including changing the script so that the target stimuli appear randomly in one of 9 screen positions.
+
+(b) By default, the time intervals are randomly chosen  (with replacement) from 1000ms, 2000ms, 3000ms, 4000ms, 5000ms, 6000ms, 7000ms, 8000ms, 9000ms, 10000ms
+Changes can easily be made under "Editable Lists"
+
+(c) By default, the test runs for 10 Minutes. Changes can be made under "Editable Parameters -> parameters.testduration"
+
+(d) By default, the color of the circle is red. Changes can be made under "Editable Parameters"
+
+Procedure:
+Task starts with the presentation of a red circle (this response latency not considered for summary statistics).
+Immediately after the left or right mouse button response, the next trial starts randomly selecting one of the 
+10 possible stimintervals.
+If a response is made prior to the appearance of the red circle, the trial terminates and a new trial starts.
+The number of early responses are counted.
+
+___________________________________________________________________________________________________________________
+INSTRUCTIONS 
+___________________________________________________________________________________________________________________
+The instructions can be easily changed under "Editable Instructions"
+	
+___________________________________________________________________________________________________________________	
+EDITABLE CODE 
+___________________________________________________________________________________________________________________	
+check below for (relatively) easily editable parameters, stimuli, instructions etc. 
+Keep in mind that you can use this script as a template and therefore always "mess" with the entire code to further
+customize your experiment.
+
+The parameters you can change are:
+
+/targetcolor:							sets the color of the circle; the default is red
+/targetsize:							sets the size of the circle; the default is 10% of the vertical screen
+/targetx:								sets the x-coordinate of  the target circle ; the default is the center (50%)
+/targety:								sets the y-coordinate of the target circle , the default is the center (50%)
+/feedbackheight:						height of feedback text stimulus (relative to canvas height) (default: 5%)
+
+/fixed:								determines whether to use the fixed coordinates for the target stimulus (= 1)
+									or to select randomly from 9 different screen positions (= 0);  
+									default is 1 (= fixed position)
+
+/testduration:							duration of test: recommended minimum time is 600000ms => 10 min
+
+/presenttrialfeedback:					true = after each trial the response latency is reported (default)
+									false = no trial response latencies are reported
+										
+/rtfeedback_duration:					duration of feedback (default: 500ms)
+										Note: feedback duration is counted towards taskduration
+
+</usermanual>
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EDITABLE PARAMETERS: change editable parameters here
+**************************************************************************************************************
+**************************************************************************************************************
+
+<parameters>
+/targetcolor = red
+/targetsize = 10%
+/targetx = 50%
+/targety = 50%
+/feedbackheight = 5%
+/fixed = 1 
+
+/testduration = 600000
+/presenttrialfeedback = false
+/rtfeedback_duration = 500
+</parameters>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EDITABLE INSTRUCTIONS: change instructions here
+**************************************************************************************************************
+**************************************************************************************************************
+
+<instruct>
+/ fontstyle = ("Arial", 3.5%, true, false, false, false, 5, 1)
+</instruct>
+
+Note:
+Change instructions below if needed
+(they will automatically be inserted into perceptualvigilance_intro1.htm)
+
+<expressions>
+/instructions = {
+	"<h1>Reaction Time Task<h1><hr>
+	<p> A <span class='red' style='font-size:20vh'>&#9679;</span> will appear on the screen at random times.</p>
+	<p>Your task is to press the SPACEBAR as soon as possible once the red circle is presented.</p>	
+	<p>Once you have responded, the computer will display your reaction time for <%parameters.rtfeedback_duration/1000%>
+	seconds. Your response to the first red circle is considered practice.</p>
+	<p>The test will take <%parameters.testduration/1000/60%> minutes to complete.</p><br>
+	<p>Start when you are ready.</p>"
+}
+</expressions>
+
+<htmlpage instruct>
+/ file = "perceptualvigilance_keyboard_intro1.htm"
+</htmlpage>
+
+
+<text ResponseReminder>
+/ items = ("Press SPACEBAR as soon as you see the red circle")
+/ position = (50%, 90%)
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 0)
+/ txcolor = gray
+/ txbgcolor = white
+/erase = false
+</text>
+
+<text finish>
+/ items = ("Thank you!")
+/ fontstyle = ("Arial", 8%, true, false, false, false, 5, 1)
+/ position = (50%, 20%)
+/ size = (80%, 10%)
+/ vjustify = center
+/ valign = center
+/ halign = center
+</text>
+
+<text exit>
+/ items = ("<press spacebar to exit>")
+/ fontstyle = ("Arial", 3%, false, false, false, false, 5, 1)
+/ position = (50%, 90%)
+/ size = (80%, 5%)
+/ vjustify = center
+/ valign = center
+/ halign = center
+</text>
+
+
+****************************************************************************************************
+general instruction expressions: adjust the instruction text depending on device used to run script
+****************************************************************************************************
+<expressions>
+/buttoninstruct1 = if (computer.touch && !computer.haskeyboard) {"touch";} else {"click";}
+/buttoninstruct2 = if (computer.touch && !computer.haskeyboard) {
+"response finger";} else {"mouse cursor";}
+</expressions>
+
+**************************************************************************************************************
+**************************************************************************************************************
+	EDITABLE LISTS: change editable lists here
+**************************************************************************************************************
+**************************************************************************************************************
+
+Note:
+List.stimulusinterval randomly selects with replacement the amount of time that the focus stimulus will be shown before 
+presenting the target. (suggested intervals: 1s-10s)
+
+<list stimulusinterval>
+/ items = (2000, 3000, 4000, 5000, 6000, 7000, 8000)
+
+/ replace = true
+/ selectionrate = trial
+</list>
+
+**************************************************************************************************************
+								!!!REMAINING CODE: Customize after careful consideration only!!!
+**************************************************************************************************************
+
+
+**************************************************************************************************************
+**************************************************************************************************************
+	DEFAULTS
+**************************************************************************************************************
+**************************************************************************************************************
+script requires Inquisit 6.1.0.0 or higher
+
+<defaults>
+/canvasaspectratio = (4,3)
+/minimumversion = "6.1.0.0"
+/inputdevice = keyboard
+/ fontstyle = ("Arial", 3.5%)
+/ screencolor = white
+/ txbgcolor = white
+/ txcolor = black
+</defaults>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	DATA: this section contains data file information
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+*************************
+raw data
+*************************
+<data>
+/ columns = (build, computer.platform, date, time, subject, group, script.sessionid, blockcode, blocknum, 
+trialcode, trialnum, 
+parameters.testduration,
+parameters.targetcolor, parameters.targetsize, parameters.fixed, parameters.targetx, parameters.targety, 
+values.stiminterval, values.trialStart, shape.targetcircle.timestamp, values.lastCircleTimestamp
+response, values.rt_elapsed, values.rt, values.EarlyResponse, values.countEarlyResponses, values.countResponses)
+</data>
+
+
+***********************
+Summary Data
+***********************
+
+<summarydata>
+/ columns = (computer.platform, script.startdate, script.starttime, script.subjectid, script.groupid, script.sessionid, script.elapsedtime, 
+script.completed,
+parameters.testduration, parameters.targetcolor, parameters.targetsize, parameters.fixed, parameters.targetx, parameters.targety, 
+values.countEarlyResponses, values.countResponses, expressions.proportionEarlyResponses,
+expressions.meanRT, expressions.Std, expressions.medianRT, expressions.minRT, expressions.maxRT)
+</summarydata>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	VALUES: automatically updated
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+/completed:							0 = script was not completed; 1 = script was completed (all conditions run)
+
+/stiminterval:						determines how long the focus stimulus is shown before the target stimulus is presented
+/rt:								stores the current response latency
+/EarlyResponse:						1 = the response was given before the circle appeared
+									0 = the response was given after the circle appeared
+/countEarlyResponses:				count of all early responses									
+/trialStart:						script.elapsedtime (in ms) at start of trial (script.elapsedtime measured from start of script)
+/rt_elapsed:						script.elapsedtime (in ms) at time of response
+/lastCircleTimestamp:				stores the script.elapsedtime of the last circle appearance	
+/countResponses:					counts the number of responses made (excluding the first)							
+
+<values>
+/stiminterval = 0
+/rt = 0
+/EarlyResponse = 0
+/countEarlyResponses = 0
+/trialStart = 0
+/rt_elapsed = 0
+/lastCircleTimestamp = 0
+/countResponses = 0
+</values>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	EXPRESSIONS
+*******************************************************************************************************************
+*******************************************************************************************************************
+/meanRT:			calculates the mean response latency (for trials that were responded to)
+/StD:				calculates the standard deviation of the response latencies (for trials that were responded to)
+/medianRT:			calculates the median latency (for trials that were responded to)
+/minrt:				stores the minimum response latency
+/maxrt:				stores the maximum response latency
+Note: list.latencies is used to retrieve above descriptive statistics
+
+/proportionEarlyResponses: proportion early responses (in relation to number of responses made)
+
+<expressions>
+/meanRT = list.latencies.mean
+/medianRT = list.latencies.median
+/Std = list.latencies.standarddeviation
+/minRT = list.latencies.minimum
+/maxRT = list.latencies.maximum
+/proportionEarlyResponses = values.countEarlyResponses/values.countResponses
+</expressions>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	STIMULI
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+<shape targetcircle>
+/ shape = circle
+/ position = (parameters.targetx, parameters.targety)
+/ color  = red
+/ size = (parameters.targetsize*0.75, parameters.targetsize)
+</shape>
+
+<text RT_feedback>
+/ onprepare = [
+	if (values.rt=="too early"){
+		text.RT_feedback.textcolor = red;
+	} else {
+		text.RT_feedback.textcolor = black;
+	};
+]
+/items = ("<%values.rt%>")
+/ fontstyle = ("Arial", parameters.feedbackheight, false, false, false, false, 5, 1)
+/txbgcolor = white
+/ position = (50%, 50%)
+</text>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	LISTS
+*******************************************************************************************************************
+*******************************************************************************************************************
+Note:
+list.targetposition selects randomly an x-coordinate and a y-coordinate, so that the target can appear in 9 different screen locations
+
+<list targetposition>
+/items = (25%, 50%, 75%)
+/replace = true
+/ selectionrate = always
+</list>
+
+Data list: stores latencies of all trials that are responded to (fills during runtime).
+-> used for descriptive statistics
+<list latencies>
+</list>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	TRIALS
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+<trial practice>
+/ ontrialbegin = [
+	trial.practice.insertstimulustime(shape.targetcircle, 750);
+]
+/stimulusframes = [1 = ResponseReminder]
+/validresponse = (" ")
+/ recorddata = false
+/ ontrialend = [
+	trial.practice.resetstimulusframes();
+	values.rt = trial.practice.latency;
+]
+/ branch = [
+	return trial.RT_feedback;
+]
+</trial>
+
+Note:
+Main trial: presents the fixationcross and the stimulus (either in a fixed position or randomly) and waits for  mouse click
+<trial USRT>
+/ontrialbegin = [
+	values.trialStart = script.elapsedtime;
+	values.EarlyResponse = 0;
+	values.rt = "too early";
+	if (parameters.fixed == 0){
+		parameters.targetx = list.targetposition.nextvalue; 
+		parameters.targety= list.targetposition.nextvalue;
+	};
+
+	values.lastCircleTimestamp = shape.targetcircle.timestamp;	
+	values.stiminterval = list.stimulusinterval.nextvalue;
+	trial.USRT.insertstimulustime(shape.targetcircle, values.stiminterval);
+]
+/ stimulusframes = [1 = ResponseReminder]
+/responseinterrupt = immediate
+/beginresponsetime = 0
+/validresponse = (" ")
+/ isvalidresponse = [
+	values.rt_elapsed = script.elapsedtime;
+	return (true);
+]
+/ontrialend = [
+	trial.USRT.resetstimulusframes();
+
+	if (shape.targetcircle.timestamp <= values.lastCircleTimestamp){
+		values.EarlyResponse = 1;
+		values.countEarlyResponses += 1;
+		values.countResponses += 1;
+	} else {
+		values.rt = values.rt_elapsed - shape.targetcircle.timestamp;
+		list.latencies.appenditem(values.rt);
+		values.countResponses += 1;
+	};
+]		
+/ branch = [
+	if (parameters.presenttrialfeedback == true) {
+		return trial.rt_feedback;
+	} else {
+		return trial.usrt;
+	};
+]
+</trial>
+
+Note: presents latency feedback for parameters.rtfeedback_duration (editable value)
+<trial RT_feedback>
+/stimulusframes = [1 = RT_feedback]
+
+/ validresponse = (" ")//for touchscreens: present inactive response buttons
+/ isvalidresponse = [
+	return(false);
+]
+
+/trialduration = parameters.rtfeedback_duration
+/recorddata = false
+/branch = [trial.usrt]
+</trial>
+
+<trial finish>
+/ stimulusframes = [1 = finish, exit]
+/ validresponse = (" ")
+/ recorddata = false
+</trial>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	BLOCKS
+*******************************************************************************************************************
+*******************************************************************************************************************
+
+Note: this is the main block provided. It runs a specified amount of time with either a fixed or a 
+random position for the target.
+
+<block USRTblock>
+/ trials = [
+	1 = practice; 
+	2 = USRT;
+]
+/timeout = parameters.testduration
+</block>
+
+<block finish>
+/ trials = [
+	1 = finish;
+]
+</block>
+
+*******************************************************************************************************************
+*******************************************************************************************************************
+	EXPERIMENT
+*******************************************************************************************************************
+*******************************************************************************************************************
+Note: Main script, change according to your needs.
+
+<expt>
+/ preinstructions = (instruct)
+/ blocks = [
+	1 = USRTblock;
+	2 = finish;
+]
+</expt>
+
+<monkey>
+/ latencydistribution = normal(5000, 1000)
+</monkey>
+
+*******************************************************************************************************************
+										End of File
+*******************************************************************************************************************
